@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabi_memo/add_data_screen.dart';
 import 'package:tabi_memo/detail.dart';
 
 void main() {
@@ -38,6 +39,19 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AddDataScreen(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: Center(
         child: Expanded(
