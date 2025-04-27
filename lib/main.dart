@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tabi_memo/add_data_screen.dart';
-import 'package:tabi_memo/detail.dart';
+import 'package:tabi_memo/screens/add_data_screen.dart';
+import 'package:tabi_memo/screens/detail.dart';
+import 'package:tabi_memo/database/database_helper.dart';
 
 void main() {
   runApp(const MyApp());
