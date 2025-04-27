@@ -53,23 +53,41 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      body: Center(
-        child: Expanded(
-          child: ListView.builder(
-            itemCount: 10,
-            itemBuilder: (context, index) => ListTile(
-              title: Text('Item $index'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const DetailPage(),
+      body: GestureDetector(
+        child: ListView(
+          children: <Widget>[
+            Card(
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        "Title ", // Replace with actual title
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                      Text(
+                        "body", // Replace with actual title
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                    ],
                   ),
-                );
-              },
+                  Text(
+                    "DateTime", // Replace with actual title
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                ],
+              ),
             ),
-          ),
+          ],
         ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const DetailPage(),
+            ),
+          );
+        },
       ),
     );
   }
