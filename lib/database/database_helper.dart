@@ -1,6 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
+import 'package:tabi_memo/models/memo.dart';
 
 class DatabaseHelper {
   static Database? _database;
@@ -11,9 +12,19 @@ class DatabaseHelper {
     return _database!;
   }
 
-  static Future<int> insertMemo(Map<String, dynamic> note) async {
+  static Future<int> insert(Map<String, dynamic> memo) async {
     final db = await database;
-    return await db.insert('notes', note);
+    return await db.insert('notes', memo);
+  }
+
+  static Future<List<Map<String, dynamic>>> select() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('notes');
+    if (maps.isNotEmpty) {
+      return maps;
+    } else {
+      throw Exception('No data found');
+    }
   }
 
   static Future<Database> _initDB() async {
@@ -28,7 +39,9 @@ class DatabaseHelper {
           CREATE TABLE notes (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT,
-            content TEXT
+            body TEXT,
+            date TEXT,
+            imagePath TEXT
           )
         ''');
       },

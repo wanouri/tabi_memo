@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:tabi_memo/database/database_helper.dart';
 
 class AddDataScreen extends StatefulWidget {
   const AddDataScreen({super.key});
@@ -100,6 +101,12 @@ class _AddDataScreenState extends State<AddDataScreen> {
             ElevatedButton(
               onPressed: () {
                 // Handle save logic here
+                DatabaseHelper.insert({
+                  'title': _titleController.text,
+                  'body': _bodyController.text,
+                  'date': _selectedDate?.toIso8601String(),
+                  'imagePath': _imagePath,
+                });
               },
               child: Center(child: Text('Save')),
             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabi_memo/models/memo.dart';
 import 'package:tabi_memo/screens/add_data_screen.dart';
 import 'package:tabi_memo/screens/detail.dart';
 import 'package:tabi_memo/database/database_helper.dart';
@@ -34,8 +35,33 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  List<Memo> memos = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchMemos();
+  }
+
+  Future<void> _fetchMemos() async {
+    final List<Map<String, dynamic>> maps = await DatabaseHelper.select();
+    setState(() {
+      memos = List.generate(maps.length, (i) {
+        return Memo(
+          id: maps[i]['id'],
+          title: maps[i]['title'],
+          body: maps[i]['body'],
+          date: DateTime.parse(maps[i]['date']),
+          imagePath: maps[i]['imagePath'],
+        );
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    _fetchMemos();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -54,39 +80,20 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      body: GestureDetector(
-        child: ListView(
-          children: <Widget>[
-            Card(
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Text(
-                        "Title ", // Replace with actual title
-                        style: const TextStyle(fontSize: 20),
-                      ),
-                      Text(
-                        "body", // Replace with actual title
-                        style: const TextStyle(fontSize: 20),
-                      ),
-                    ],
-                  ),
-                  Text(
-                    "DateTime", // Replace with actual title
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const DetailPage(),
-            ),
+      body: ListView.builder(
+        itemCount: memos.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(memos[index].title),
+            subtitle: Text(memos[index].body),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DetailPage(),
+                ),
+              );
+            },
           );
         },
       ),
