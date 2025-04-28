@@ -40,10 +40,10 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    _fetchMemos();
+    _getMemos();
   }
 
-  Future<void> _fetchMemos() async {
+  Future<void> _getMemos() async {
     final List<Map<String, dynamic>> maps = await DatabaseHelper.select();
     setState(() {
       memos = List.generate(maps.length, (i) {
@@ -52,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
           title: maps[i]['title'],
           body: maps[i]['body'],
           date: DateTime.parse(maps[i]['date']),
-          imagePath: maps[i]['imagePath'],
+          imagePath: maps[i]['imagePath'] ?? '',
         );
       });
     });
@@ -60,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    _fetchMemos();
+    _getMemos();
 
     return Scaffold(
       appBar: AppBar(
@@ -76,6 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   builder: (context) => const AddDataScreen(),
                 ),
               );
+              setState(() {});
             },
           ),
         ],
