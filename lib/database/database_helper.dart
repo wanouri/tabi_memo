@@ -12,7 +12,7 @@ class DatabaseHelper {
     return _database!;
   }
 
-  static Future<int> insert(Map<String, dynamic> memo) async {
+  static Future<int> insertMemo(Map<String, dynamic> memo) async {
     final db = await database;
     return await db.insert('notes', memo);
   }
@@ -23,7 +23,7 @@ class DatabaseHelper {
     if (maps.isNotEmpty) {
       return maps;
     } else {
-      throw Exception('No data found');
+      return [];
     }
   }
 
