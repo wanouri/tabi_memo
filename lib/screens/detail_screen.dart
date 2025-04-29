@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:tabi_memo/models/memo.dart';
 
@@ -12,29 +11,53 @@ class DetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("tabi memo - Detail Screen"),
+        title: const Text("旅のひとことメモ"),
       ),
-      body: Center(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // タイトル
             Text(
               memo.title,
-              style: TextStyle(fontSize: 20),
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue,
+              ),
             ),
+            const SizedBox(height: 8),
+
+            // 日付
+            Text(
+              memo.date.toIso8601String().substring(0, 10),
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey[600],
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            // 本文
             Text(
               memo.body,
-              style: TextStyle(fontSize: 20),
+              style: const TextStyle(
+                fontSize: 18,
+                height: 1.5,
+              ),
             ),
-            Text(
-              memo.date.toIso8601String(),
-              style: TextStyle(fontSize: 20),
-            ),
+            const SizedBox(height: 24),
+
+            // 画像（あるときだけ）
             if (memo.imagePath.isNotEmpty)
-              Image.file(
-                File(memo.imagePath),
-                width: 100,
-                height: 100,
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.file(
+                  File(memo.imagePath),
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
               ),
           ],
         ),
