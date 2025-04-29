@@ -1,11 +1,11 @@
 class Memo {
-  Memo({
-    required this.id, // ID
-    required this.title, // タイトル
-    required this.body, // 本文
-    required this.date, // 日付
-    required this.imagePath, // 画像パス
-  });
+  const Memo(
+    this.id, // ID
+    this.title, // タイトル
+    this.body, // 本文
+    this.date, // 日付
+    this.imagePath, // 画像パス
+  );
 
   final int id;
   final String title;

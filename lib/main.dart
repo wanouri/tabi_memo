@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tabi_memo/models/memo.dart';
 import 'package:tabi_memo/screens/add_data_screen.dart';
-import 'package:tabi_memo/screens/detail.dart';
+import 'package:tabi_memo/screens/detail_screen.dart';
 import 'package:tabi_memo/database/database_helper.dart';
 
 void main() {
@@ -48,11 +48,11 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       memos = List.generate(maps.length, (i) {
         return Memo(
-          id: maps[i]['id'],
-          title: maps[i]['title'],
-          body: maps[i]['body'],
-          date: DateTime.parse(maps[i]['date']),
-          imagePath: maps[i]['imagePath'] ?? '',
+          maps[i]['id'],
+          maps[i]['title'],
+          maps[i]['body'],
+          DateTime.parse(maps[i]['date']),
+          maps[i]['imagePath'] ?? '',
         );
       });
     });
@@ -91,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => DetailPage(),
+                  builder: (context) => DetailScreen(memo: memos[index]),
                 ),
               );
             },
