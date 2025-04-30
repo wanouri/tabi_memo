@@ -61,7 +61,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     _getMemos();
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -84,17 +83,41 @@ class _MyHomePageState extends State<MyHomePage> {
       body: ListView.builder(
         itemCount: memos.length,
         itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(memos[index].title),
-            subtitle: Text(memos[index].body),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DetailScreen(memo: memos[index]),
+          final memo = memos[index];
+          return Dismissible(
+            key: Key(memo.id.toString()),
+            background: Container(
+              color: Colors.red,
+              alignment: Alignment.centerRight,
+              padding: const EdgeInsets.only(right: 20),
+              child: const Icon(Icons.delete, color: Colors.white),
+            ),
+            direction: DismissDirection.endToStart,
+            onDismissed: (direction) async {
+              setState(() {
+                memos.removeAt(index);
+              });
+
+              DatabaseHelper.delete(memo.id);
+              if (!mounted) return;
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('${memo.title}を削除しました'),
                 ),
               );
             },
+            child: ListTile(
+              title: Text(memos[index].title),
+              subtitle: Text(memos[index].body),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DetailScreen(memo: memos[index]),
+                  ),
+                );
+              },
+            ),
           );
         },
       ),

@@ -12,9 +12,18 @@ class DatabaseHelper {
     return _database!;
   }
 
-  static Future<int> insertMemo(Map<String, dynamic> memo) async {
+  static Future<int> insert(Map<String, dynamic> memo) async {
     final db = await database;
     return await db.insert('notes', memo);
+  }
+
+  static Future<int> delete(int id) async {
+    final db = await database;
+    return await db.delete(
+      'notes',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
 
   static Future<List<Map<String, dynamic>>> select() async {

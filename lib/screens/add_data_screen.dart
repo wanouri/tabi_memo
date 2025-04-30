@@ -101,7 +101,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
             ElevatedButton(
               onPressed: () {
                 // Handle save logic here
-                DatabaseHelper.insertMemo({
+                DatabaseHelper.insert({
                   'title': _titleController.text,
                   'body': _bodyController.text,
                   'date': _selectedDate?.toIso8601String(),
