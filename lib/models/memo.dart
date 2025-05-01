@@ -7,9 +7,9 @@ class Memo {
     this.imagePath, // 画像パス
   );
 
-  final int id;
-  final String title;
-  final String body;
-  final DateTime date;
-  final String imagePath;
+  final int? id;
+  final String? title;
+  final String? body;
+  final DateTime? date;
+  final String? imagePath;
 }

@@ -51,8 +51,10 @@ class _MyHomePageState extends State<MyHomePage> {
           maps[i]['id'],
           maps[i]['title'],
           maps[i]['body'],
-          DateTime.parse(maps[i]['date']),
-          maps[i]['imagePath'] ?? '',
+          maps[i]['date'] == null
+              ? DateTime.now()
+              : DateTime.parse(maps[i]['date']),
+          maps[i]['imagePath'],
         );
       });
     });
@@ -72,7 +74,8 @@ class _MyHomePageState extends State<MyHomePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const AddDataScreen(),
+                  builder: (context) =>
+                      AddDataScreen(memo: Memo(null, null, null, null, null)),
                 ),
               );
               setState(() {});
@@ -98,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 memos.removeAt(index);
               });
 
-              DatabaseHelper.delete(memo.id);
+              DatabaseHelper.delete(memo.id ?? 0);
               if (!mounted) return;
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -107,8 +110,8 @@ class _MyHomePageState extends State<MyHomePage> {
               );
             },
             child: ListTile(
-              title: Text(memos[index].title),
-              subtitle: Text(memos[index].body),
+              title: Text(memos[index].title ?? ''),
+              subtitle: Text(memos[index].body ?? ''),
               onTap: () {
                 Navigator.push(
                   context,

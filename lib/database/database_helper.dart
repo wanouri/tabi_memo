@@ -26,6 +26,16 @@ class DatabaseHelper {
     );
   }
 
+  static Future<int> update(Map<String, dynamic> memo) async {
+    final db = await database;
+    return await db.update(
+      'notes', // テーブル名
+      memo, // 更新するデータ
+      where: 'id = ?', // 更新条件
+      whereArgs: [memo['id']], // 条件に使う値
+    );
+  }
+
   static Future<List<Map<String, dynamic>>> select() async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query('notes');

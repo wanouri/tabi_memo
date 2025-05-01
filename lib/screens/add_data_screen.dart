@@ -3,10 +3,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:path/path.dart';
 import 'package:tabi_memo/database/database_helper.dart';
 
+import 'package:tabi_memo/models/memo.dart';
+
 class AddDataScreen extends StatefulWidget {
-  const AddDataScreen({super.key});
+  const AddDataScreen({super.key, required this.memo});
+  final Memo memo;
 
   @override
   State<AddDataScreen> createState() => _AddDataScreenState();
@@ -18,9 +22,18 @@ class _AddDataScreenState extends State<AddDataScreen> {
   DateTime? _selectedDate;
   String? _imagePath;
 
+  @override
+  void initState() {
+    super.initState();
+    _titleController.text = widget.memo.title ?? '';
+    _bodyController.text = widget.memo.body ?? '';
+    _selectedDate = widget.memo.date;
+    _imagePath = widget.memo.imagePath;
+  }
+
   Future<void> _pickDate() async {
     final DateTime? pickedDate = await showDatePicker(
-      context: context,
+      context: this.context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
@@ -33,9 +46,8 @@ class _AddDataScreenState extends State<AddDataScreen> {
   }
 
   Future<void> _pickImage() async {
-    final ImagePicker picker = ImagePicker();
-    final XFile? pickedImage =
-        await picker.pickImage(source: ImageSource.gallery);
+    final picker = ImagePicker();
+    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
       setState(() {
         _imagePath = pickedImage.path;
@@ -46,25 +58,21 @@ class _AddDataScreenState extends State<AddDataScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Add Data'),
-      ),
+      appBar: AppBar(title: const Text('Add Data')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
-              controller: _titleController,
-              decoration: InputDecoration(labelText: 'Title'),
-            ),
-            SizedBox(height: 16),
+                controller: _titleController,
+                decoration: const InputDecoration(labelText: 'Title')),
+            const SizedBox(height: 16),
             TextField(
-              controller: _bodyController,
-              decoration: InputDecoration(labelText: 'Body'),
-              maxLines: 5,
-            ),
-            SizedBox(height: 16),
+                controller: _bodyController,
+                decoration: const InputDecoration(labelText: 'Body'),
+                maxLines: 5),
+            const SizedBox(height: 16),
             Row(
               children: [
                 Text(
@@ -72,43 +80,69 @@ class _AddDataScreenState extends State<AddDataScreen> {
                       ? 'No Date Chosen!'
                       : DateFormat.yMMMd().format(_selectedDate!),
                 ),
-                Spacer(),
+                const Spacer(),
                 ElevatedButton(
-                  onPressed: _pickDate,
-                  child: Text('Choose Date'),
-                ),
+                    onPressed: _pickDate, child: const Text('Choose Date')),
               ],
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Row(
               children: [
                 _imagePath == null
-                    ? Text('No Image Selected!')
-                    : Image.file(
-                        File(_imagePath!),
-                        width: 100,
-                        height: 100,
-                        fit: BoxFit.cover,
-                      ),
-                Spacer(),
+                    ? const Text('No Image Selected!')
+                    : Image.file(File(_imagePath!),
+                        width: 100, height: 100, fit: BoxFit.cover),
+                const Spacer(),
                 ElevatedButton(
-                  onPressed: _pickImage,
-                  child: Text('Upload Image'),
-                ),
+                    onPressed: _pickImage, child: const Text('Upload Image')),
               ],
             ),
-            Spacer(),
+            const Spacer(),
             ElevatedButton(
               onPressed: () {
-                // Handle save logic here
-                DatabaseHelper.insert({
-                  'title': _titleController.text,
-                  'body': _bodyController.text,
-                  'date': _selectedDate?.toIso8601String(),
-                  'imagePath': _imagePath,
-                });
+                if (_titleController.text.isEmpty ||
+                    _bodyController.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Please fill in all fields'),
+                    ),
+                  );
+                  return;
+                }
+                if (_selectedDate == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Please select a date'),
+                    ),
+                  );
+                  return;
+                }
+                if (_imagePath == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Please select an image'),
+                    ),
+                  );
+                  return;
+                }
+                if (widget.memo.id != null) {
+                  DatabaseHelper.update({
+                    'id': widget.memo.id,
+                    'title': _titleController.text,
+                    'body': _bodyController.text,
+                    'date': _selectedDate?.toIso8601String(),
+                    'imagePath': _imagePath,
+                  });
+                } else {
+                  DatabaseHelper.insert({
+                    'title': _titleController.text,
+                    'body': _bodyController.text,
+                    'date': _selectedDate?.toIso8601String(),
+                    'imagePath': _imagePath,
+                  });
+                }
               },
-              child: Center(child: Text('Save')),
+              child: const Center(child: Text('Save')),
             ),
           ],
         ),
