@@ -46,6 +46,17 @@ class DatabaseHelper {
     }
   }
 
+  static Future<Map<String, dynamic>> selectAt(int id) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps =
+        await db.query('notes', where: 'id = ?', whereArgs: [id]);
+    if (maps.isNotEmpty) {
+      return maps.first;
+    } else {
+      return {};
+    }
+  }
+
   static Future<Database> _initDB() async {
     final directory = await getApplicationDocumentsDirectory();
     final path = join(directory.path, 'tabi_memo.db');

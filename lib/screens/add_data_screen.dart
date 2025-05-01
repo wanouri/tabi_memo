@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:path/path.dart';
 import 'package:tabi_memo/database/database_helper.dart';
 
 import 'package:tabi_memo/models/memo.dart';
@@ -126,13 +125,24 @@ class _AddDataScreenState extends State<AddDataScreen> {
                   return;
                 }
                 if (widget.memo.id != null) {
+                  Memo memo = Memo(
+                    widget.memo.id,
+                    _titleController.text,
+                    _bodyController.text,
+                    _selectedDate,
+                    _imagePath,
+                  );
+
                   DatabaseHelper.update({
-                    'id': widget.memo.id,
-                    'title': _titleController.text,
-                    'body': _bodyController.text,
-                    'date': _selectedDate?.toIso8601String(),
-                    'imagePath': _imagePath,
+                    'id': memo.id,
+                    'title': memo.title,
+                    'body': memo.body,
+                    'date': memo.date?.toIso8601String(),
+                    'imagePath': memo.imagePath,
                   });
+                  if (context.mounted) {
+                    Navigator.pop(context, memo); // 保存成功を示すtrueを返す
+                  }
                 } else {
                   DatabaseHelper.insert({
                     'title': _titleController.text,
