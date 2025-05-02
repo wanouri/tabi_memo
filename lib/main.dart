@@ -3,6 +3,7 @@ import 'package:tabi_memo/models/memo.dart';
 import 'package:tabi_memo/screens/add_data_screen.dart';
 import 'package:tabi_memo/screens/detail_screen.dart';
 import 'package:tabi_memo/database/database_helper.dart';
+import 'dart:io';
 
 void main() {
   runApp(const MyApp());
@@ -11,16 +12,35 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'tabi memo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
         useMaterial3: true,
+        scaffoldBackgroundColor: Colors.grey[50],
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.teal,
+          foregroundColor: Colors.white,
+          elevation: 1,
+        ),
+        textTheme: const TextTheme(
+          titleLarge: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          bodyMedium: TextStyle(fontSize: 16),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.teal,
+            foregroundColor: Colors.white,
+            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        ),
       ),
-      home: const MyHomePage(title: 'tabi memo'),
+      home: const MyHomePage(title: '旅のひとことメモ'),
     );
   }
 }
@@ -62,64 +82,116 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    _getMemos();
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final result = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  AddDataScreen(memo: Memo(null, null, null, null, null)),
+            ),
+          );
+          if (result == true) {
+            _getMemos();
+          }
+        },
+        child: const Icon(Icons.add),
+      ),
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
         actions: [
           IconButton(
-            icon: const Icon(Icons.add),
+            icon: const Icon(Icons.refresh),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      AddDataScreen(memo: Memo(null, null, null, null, null)),
-                ),
-              );
-              setState(() {});
+              _getMemos();
             },
           ),
         ],
       ),
       body: ListView.builder(
+        padding: const EdgeInsets.all(12),
         itemCount: memos.length,
         itemBuilder: (context, index) {
           final memo = memos[index];
-          return Dismissible(
-            key: Key(memo.id.toString()),
-            background: Container(
-              color: Colors.red,
-              alignment: Alignment.centerRight,
-              padding: const EdgeInsets.only(right: 20),
-              child: const Icon(Icons.delete, color: Colors.white),
+          return Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
             ),
-            direction: DismissDirection.endToStart,
-            onDismissed: (direction) async {
-              setState(() {
-                memos.removeAt(index);
-              });
+            elevation: 2,
+            margin: const EdgeInsets.symmetric(vertical: 6),
+            child: Dismissible(
+              key: Key(memo.id.toString()),
+              background: Container(
+                color: Colors.red,
+                alignment: Alignment.centerRight,
+                padding: const EdgeInsets.only(right: 20),
+                child: const Icon(Icons.delete, color: Colors.white),
+              ),
+              direction: DismissDirection.endToStart,
+              onDismissed: (direction) async {
+                setState(() {
+                  memos.removeAt(index);
+                });
 
-              DatabaseHelper.delete(memo.id ?? 0);
-              if (!mounted) return;
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('${memo.title}を削除しました'),
-                ),
-              );
-            },
-            child: ListTile(
-              title: Text(memos[index].title ?? ''),
-              subtitle: Text(memos[index].body ?? ''),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DetailScreen(memo: memos[index]),
+                DatabaseHelper.delete(memo.id ?? 0);
+                if (!mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('${memo.title}を削除しました'),
                   ),
                 );
               },
+              child: ListTile(
+                leading: memo.imagePath != null &&
+                        memo.imagePath!.isNotEmpty &&
+                        File(memo.imagePath!).existsSync()
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.file(
+                          File(memo.imagePath!),
+                          width: 56,
+                          height: 56,
+                          fit: BoxFit.cover,
+                        ),
+                      )
+                    : const Icon(Icons.image, size: 40, color: Colors.grey),
+                title: Text(
+                  memo.title ?? '',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      memo.body ?? '',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+                    if (memo.date != null)
+                      Text(
+                        '${memo.date!.year}/${memo.date!.month.toString().padLeft(2, '0')}/${memo.date!.day.toString().padLeft(2, '0')}',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall
+                            ?.copyWith(color: Colors.grey),
+                      ),
+                  ],
+                ),
+                onTap: () async {
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DetailScreen(memo: memo),
+                    ),
+                  );
+                  if (result == true) {
+                    _getMemos();
+                  }
+                },
+              ),
             ),
           );
         },

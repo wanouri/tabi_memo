@@ -1,10 +1,10 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
 import 'package:tabi_memo/database/database_helper.dart';
-
 import 'package:tabi_memo/models/memo.dart';
 
 class AddDataScreen extends StatefulWidget {
@@ -32,7 +32,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
 
   Future<void> _pickDate() async {
     final DateTime? pickedDate = await showDatePicker(
-      context: this.context,
+      context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
@@ -48,8 +48,13 @@ class _AddDataScreenState extends State<AddDataScreen> {
     final picker = ImagePicker();
     final pickedImage = await picker.pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
+      final directory = await getApplicationDocumentsDirectory();
+      final fileName = path.basename(pickedImage.path);
+      final savedImage =
+          await File(pickedImage.path).copy('${directory.path}/$fileName');
+
       setState(() {
-        _imagePath = pickedImage.path;
+        _imagePath = savedImage.path;
       });
     }
   }
@@ -57,102 +62,156 @@ class _AddDataScreenState extends State<AddDataScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Data')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      appBar: AppBar(title: const Text('メモを追加／編集')),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
-                controller: _titleController,
-                decoration: const InputDecoration(labelText: 'Title')),
-            const SizedBox(height: 16),
+              controller: _titleController,
+              decoration: const InputDecoration(
+                labelText: 'タイトル',
+                prefixIcon: Icon(Icons.title),
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 20),
             TextField(
-                controller: _bodyController,
-                decoration: const InputDecoration(labelText: 'Body'),
-                maxLines: 5),
-            const SizedBox(height: 16),
+              controller: _bodyController,
+              decoration: const InputDecoration(
+                labelText: '本文',
+                prefixIcon: Icon(Icons.notes),
+                border: OutlineInputBorder(),
+              ),
+              maxLines: 5,
+            ),
+            const SizedBox(height: 20),
             Row(
               children: [
-                Text(
-                  _selectedDate == null
-                      ? 'No Date Chosen!'
-                      : DateFormat.yMMMd().format(_selectedDate!),
+                Icon(Icons.calendar_month, color: Colors.grey[700]),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    _selectedDate == null
+                        ? '日付が選択されていません'
+                        : DateFormat.yMMMd().format(_selectedDate!),
+                    style: TextStyle(fontSize: 16, color: Colors.grey[800]),
+                  ),
                 ),
-                const Spacer(),
                 ElevatedButton(
-                    onPressed: _pickDate, child: const Text('Choose Date')),
+                  onPressed: _pickDate,
+                  child: const Text('日付選択'),
+                ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _imagePath == null
-                    ? const Text('No Image Selected!')
-                    : Image.file(File(_imagePath!),
-                        width: 100, height: 100, fit: BoxFit.cover),
-                const Spacer(),
-                ElevatedButton(
-                    onPressed: _pickImage, child: const Text('Upload Image')),
+                    ? Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.grey.shade300),
+                        ),
+                        child: const Icon(Icons.image, color: Colors.grey),
+                      )
+                    : ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.file(
+                          File(_imagePath!),
+                          width: 100,
+                          height: 100,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: _pickImage,
+                    icon: const Icon(Icons.upload_file),
+                    label: const Text('画像アップロード'),
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 20),
+                      textStyle: const TextStyle(fontSize: 16),
+                    ),
+                  ),
+                ),
               ],
             ),
-            const Spacer(),
-            ElevatedButton(
-              onPressed: () {
-                if (_titleController.text.isEmpty ||
-                    _bodyController.text.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Please fill in all fields'),
-                    ),
-                  );
-                  return;
-                }
-                if (_selectedDate == null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Please select a date'),
-                    ),
-                  );
-                  return;
-                }
-                if (_imagePath == null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Please select an image'),
-                    ),
-                  );
-                  return;
-                }
-                if (widget.memo.id != null) {
-                  Memo memo = Memo(
-                    widget.memo.id,
-                    _titleController.text,
-                    _bodyController.text,
-                    _selectedDate,
-                    _imagePath,
-                  );
-
-                  DatabaseHelper.update({
-                    'id': memo.id,
-                    'title': memo.title,
-                    'body': memo.body,
-                    'date': memo.date?.toIso8601String(),
-                    'imagePath': memo.imagePath,
-                  });
-                  if (context.mounted) {
-                    Navigator.pop(context, memo); // 保存成功を示すtrueを返す
+            const SizedBox(height: 30),
+            Center(
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  if (_titleController.text.isEmpty ||
+                      _bodyController.text.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('すべての項目を入力してください'),
+                      ),
+                    );
+                    return;
                   }
-                } else {
-                  DatabaseHelper.insert({
-                    'title': _titleController.text,
-                    'body': _bodyController.text,
-                    'date': _selectedDate?.toIso8601String(),
-                    'imagePath': _imagePath,
-                  });
-                }
-              },
-              child: const Center(child: Text('Save')),
+                  if (_selectedDate == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('日付を選択してください'),
+                      ),
+                    );
+                    return;
+                  }
+                  if (_imagePath == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('画像を選択してください'),
+                      ),
+                    );
+                    return;
+                  }
+                  if (widget.memo.id != null) {
+                    Memo memo = Memo(
+                      widget.memo.id,
+                      _titleController.text,
+                      _bodyController.text,
+                      _selectedDate,
+                      _imagePath,
+                    );
+
+                    DatabaseHelper.update({
+                      'id': memo.id,
+                      'title': memo.title,
+                      'body': memo.body,
+                      'date': memo.date?.toIso8601String(),
+                      'imagePath': memo.imagePath,
+                    });
+                    if (context.mounted) {
+                      Navigator.pop(context, memo);
+                    }
+                  } else {
+                    DatabaseHelper.insert({
+                      'title': _titleController.text,
+                      'body': _bodyController.text,
+                      'date': _selectedDate?.toIso8601String(),
+                      'imagePath': _imagePath,
+                    });
+                    Navigator.pop(context, true);
+                  }
+                },
+                icon: const Icon(Icons.save),
+                label: const Text('保存する'),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                    vertical: 14,
+                  ),
+                  textStyle: const TextStyle(fontSize: 16),
+                ),
+              ),
             ),
           ],
         ),

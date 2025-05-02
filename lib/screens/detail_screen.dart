@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:tabi_memo/database/database_helper.dart';
+import 'package:intl/intl.dart';
 import 'package:tabi_memo/models/memo.dart';
 import 'package:tabi_memo/screens/add_data_screen.dart';
 
@@ -29,6 +29,9 @@ class _DetailScreenState extends State<DetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final dateText =
+        _memo.date != null ? DateFormat('yyyy/MM/dd').format(_memo.date!) : '';
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("旅のひとことメモ"),
@@ -42,61 +45,86 @@ class _DetailScreenState extends State<DetailScreen> {
                   builder: (context) => AddDataScreen(memo: widget.memo),
                 ),
               );
-              setState(() {
-                _memo = updateMemo;
-              });
+              if (updateMemo != null) {
+                setState(() {
+                  _memo = updateMemo;
+                });
+              }
             },
           ),
         ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // タイトル
-            Text(
-              _memo.title ?? '',
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.blue,
-              ),
-            ),
-            const SizedBox(height: 8),
-
-            // 日付
-            Text(
-              _memo.date!.toIso8601String().substring(0, 10),
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[600],
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // 本文
-            Text(
-              _memo.body ?? '',
-              style: const TextStyle(
-                fontSize: 18,
-                height: 1.5,
-              ),
-            ),
-            const SizedBox(height: 24),
-
-            // 画像（あるときだけ）
-            if (_memo.imagePath!.isNotEmpty)
-              if (File(_memo.imagePath ?? '').existsSync())
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.file(
-                    File(_memo.imagePath ?? ''),
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
+        padding: const EdgeInsets.all(24.0),
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          elevation: 4,
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    const Icon(Icons.place, color: Colors.teal),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        _memo.title ?? '',
+                        style:
+                            Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.teal[800],
+                                ),
+                      ),
+                    ),
+                  ],
                 ),
-          ],
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    const Icon(Icons.calendar_today,
+                        size: 16, color: Colors.grey),
+                    const SizedBox(width: 6),
+                    Text(
+                      dateText,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Colors.grey[600],
+                          ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  _memo.body ?? '',
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        height: 1.6,
+                      ),
+                ),
+                const SizedBox(height: 24),
+                if (_memo.imagePath != null && _memo.imagePath!.isNotEmpty)
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.file(
+                      File(_memo.imagePath!),
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          height: 150,
+                          color: Colors.grey[200],
+                          child: const Center(
+                            child: Text('画像を読み込めませんでした'),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+              ],
+            ),
+          ),
         ),
       ),
     );

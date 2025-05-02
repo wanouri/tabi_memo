@@ -1,7 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
-import 'package:tabi_memo/models/memo.dart';
 
 class DatabaseHelper {
   static Database? _database;
