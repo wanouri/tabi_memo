@@ -120,6 +120,10 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             elevation: 2,
             margin: const EdgeInsets.symmetric(vertical: 6),
+            // DismissibleのonDismissedは、スワイプして削除したときに呼ばれる
+            // directionは、スワイプした方向を示す
+            // onDismissedは、スワイプして削除したときに呼ばれる
+            // directionは、スワイプした方向を示す
             child: Dismissible(
               key: Key(memo.id.toString()),
               background: Container(
@@ -129,6 +133,23 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: const Icon(Icons.delete, color: Colors.white),
               ),
               direction: DismissDirection.endToStart,
+              confirmDismiss: (direction) => showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('削除確認'),
+                  content: const Text('このメモを削除しますか？'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(false),
+                      child: const Text('キャンセル'),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(true),
+                      child: const Text('削除'),
+                    ),
+                  ],
+                ),
+              ),
               onDismissed: (direction) async {
                 setState(() {
                   memos.removeAt(index);
