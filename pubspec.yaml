@@ -21,6 +21,11 @@ version: 1.0.0+1
 environment:
   sdk: ^3.6.1
 
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/icon.png"
+
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
 # consider running `flutter pub upgrade --major-versions`. Alternatively,
@@ -39,6 +44,7 @@ dependencies:
   path_provider: ^2.1.5
   sqflite: ^2.2.0+3
   path: ^1.9.0
+  flutter_launcher_icons: ^0.14.3
 
 dev_dependencies:
   flutter_test:

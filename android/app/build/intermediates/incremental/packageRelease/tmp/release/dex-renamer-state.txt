@@ -1,0 +1,4 @@
+#Tue May 06 19:26:32 JST 2025
+base.0=/Users/wanouri/Projects/FlutterApps/tabi_memo/android/app/build/intermediates/dex/release/mergeDexRelease/classes.dex
+path.0=classes.dex
+renamed.0=classes.dex

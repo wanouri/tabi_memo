@@ -1,0 +1,1 @@
+/Users/wanouri/Projects/FlutterApps/tabi_memo/android/app/build/intermediates/cxx/RelWithDebInfo/k1w4f6p5/obj/x86
