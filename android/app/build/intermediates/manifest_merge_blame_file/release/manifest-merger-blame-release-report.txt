@@ -1,6 +1,6 @@
 1<?xml version="1.0" encoding="utf-8"?>
 2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-3    package="com.yoshiyuki.matsumoto.tabi_memo"
+3    package="com.wanouri.tabi_memo"
 4    android:versionCode="1"
 5    android:versionName="1.0.0" >
 6
@@ -30,12 +30,12 @@
 24
 25    <permission
 25-->[androidx.core:core:1.13.1] /Users/wanouri/.gradle/caches/transforms-3/ceb0b9cb600ef1ebfcd008ffa3171afe/transformed/core-1.13.1/AndroidManifest.xml:22:5-24:47
-26        android:name="com.yoshiyuki.matsumoto.tabi_memo.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+26        android:name="com.wanouri.tabi_memo.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
 26-->[androidx.core:core:1.13.1] /Users/wanouri/.gradle/caches/transforms-3/ceb0b9cb600ef1ebfcd008ffa3171afe/transformed/core-1.13.1/AndroidManifest.xml:23:9-81
 27        android:protectionLevel="signature" />
 27-->[androidx.core:core:1.13.1] /Users/wanouri/.gradle/caches/transforms-3/ceb0b9cb600ef1ebfcd008ffa3171afe/transformed/core-1.13.1/AndroidManifest.xml:24:9-44
 28
-29    <uses-permission android:name="com.yoshiyuki.matsumoto.tabi_memo.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+29    <uses-permission android:name="com.wanouri.tabi_memo.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
 29-->[androidx.core:core:1.13.1] /Users/wanouri/.gradle/caches/transforms-3/ceb0b9cb600ef1ebfcd008ffa3171afe/transformed/core-1.13.1/AndroidManifest.xml:26:5-97
 29-->[androidx.core:core:1.13.1] /Users/wanouri/.gradle/caches/transforms-3/ceb0b9cb600ef1ebfcd008ffa3171afe/transformed/core-1.13.1/AndroidManifest.xml:26:22-94
 30
@@ -51,7 +51,7 @@
 36-->/Users/wanouri/Projects/FlutterApps/tabi_memo/android/app/src/main/AndroidManifest.xml:3:9-34
 37        <activity
 37-->/Users/wanouri/Projects/FlutterApps/tabi_memo/android/app/src/main/AndroidManifest.xml:6:9-27:20
-38            android:name="com.yoshiyuki.matsumoto.tabi_memo.MainActivity"
+38            android:name="com.wanouri.tabi_memo.MainActivity"
 38-->/Users/wanouri/Projects/FlutterApps/tabi_memo/android/app/src/main/AndroidManifest.xml:7:13-41
 39            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
 39-->/Users/wanouri/Projects/FlutterApps/tabi_memo/android/app/src/main/AndroidManifest.xml:12:13-163
@@ -107,7 +107,7 @@
 71-->[:image_picker_android] /Users/wanouri/.pub-cache/hosted/pub.dev/image_picker_android-0.8.12+23/android/build/intermediates/merged_manifest/release/AndroidManifest.xml:9:9-17:20
 72            android:name="io.flutter.plugins.imagepicker.ImagePickerFileProvider"
 72-->[:image_picker_android] /Users/wanouri/.pub-cache/hosted/pub.dev/image_picker_android-0.8.12+23/android/build/intermediates/merged_manifest/release/AndroidManifest.xml:10:13-82
-73            android:authorities="com.yoshiyuki.matsumoto.tabi_memo.flutter.image_provider"
+73            android:authorities="com.wanouri.tabi_memo.flutter.image_provider"
 73-->[:image_picker_android] /Users/wanouri/.pub-cache/hosted/pub.dev/image_picker_android-0.8.12+23/android/build/intermediates/merged_manifest/release/AndroidManifest.xml:11:13-74
 74            android:exported="false"
 74-->[:image_picker_android] /Users/wanouri/.pub-cache/hosted/pub.dev/image_picker_android-0.8.12+23/android/build/intermediates/merged_manifest/release/AndroidManifest.xml:12:13-37
@@ -160,7 +160,7 @@
 100-->[androidx.lifecycle:lifecycle-process:2.7.0] /Users/wanouri/.gradle/caches/transforms-3/696f154ef0ad783d6da2beb2e98c33ce/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:24:9-32:20
 101            android:name="androidx.startup.InitializationProvider"
 101-->[androidx.lifecycle:lifecycle-process:2.7.0] /Users/wanouri/.gradle/caches/transforms-3/696f154ef0ad783d6da2beb2e98c33ce/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:25:13-67
-102            android:authorities="com.yoshiyuki.matsumoto.tabi_memo.androidx-startup"
+102            android:authorities="com.wanouri.tabi_memo.androidx-startup"
 102-->[androidx.lifecycle:lifecycle-process:2.7.0] /Users/wanouri/.gradle/caches/transforms-3/696f154ef0ad783d6da2beb2e98c33ce/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:26:13-68
 103            android:exported="false" >
 103-->[androidx.lifecycle:lifecycle-process:2.7.0] /Users/wanouri/.gradle/caches/transforms-3/696f154ef0ad783d6da2beb2e98c33ce/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:27:13-37

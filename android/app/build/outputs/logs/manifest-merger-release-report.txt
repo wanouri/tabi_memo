@@ -83,7 +83,7 @@ data
 ADDED from /Users/wanouri/Projects/FlutterApps/tabi_memo/android/app/src/main/AndroidManifest.xml:42:13-50
 	android:mimeType
 		ADDED from /Users/wanouri/Projects/FlutterApps/tabi_memo/android/app/src/main/AndroidManifest.xml:42:19-48
-activity#com.yoshiyuki.matsumoto.tabi_memo.MainActivity
+activity#com.wanouri.tabi_memo.MainActivity
 ADDED from /Users/wanouri/Projects/FlutterApps/tabi_memo/android/app/src/main/AndroidManifest.xml:6:9-27:20
 	android:launchMode
 		ADDED from /Users/wanouri/Projects/FlutterApps/tabi_memo/android/app/src/main/AndroidManifest.xml:9:13-43
@@ -269,7 +269,7 @@ ADDED from [androidx.core:core:1.13.1] /Users/wanouri/.gradle/caches/transforms-
 		ADDED from [androidx.core:core:1.13.1] /Users/wanouri/.gradle/caches/transforms-3/ceb0b9cb600ef1ebfcd008ffa3171afe/transformed/core-1.13.1/AndroidManifest.xml:24:9-44
 	android:name
 		ADDED from [androidx.core:core:1.13.1] /Users/wanouri/.gradle/caches/transforms-3/ceb0b9cb600ef1ebfcd008ffa3171afe/transformed/core-1.13.1/AndroidManifest.xml:23:9-81
-permission#com.yoshiyuki.matsumoto.tabi_memo.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+permission#com.wanouri.tabi_memo.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
 ADDED from [androidx.core:core:1.13.1] /Users/wanouri/.gradle/caches/transforms-3/ceb0b9cb600ef1ebfcd008ffa3171afe/transformed/core-1.13.1/AndroidManifest.xml:22:5-24:47
 	android:protectionLevel
 		ADDED from [androidx.core:core:1.13.1] /Users/wanouri/.gradle/caches/transforms-3/ceb0b9cb600ef1ebfcd008ffa3171afe/transformed/core-1.13.1/AndroidManifest.xml:24:9-44
@@ -279,7 +279,7 @@ uses-permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
 ADDED from [androidx.core:core:1.13.1] /Users/wanouri/.gradle/caches/transforms-3/ceb0b9cb600ef1ebfcd008ffa3171afe/transformed/core-1.13.1/AndroidManifest.xml:26:5-97
 	android:name
 		ADDED from [androidx.core:core:1.13.1] /Users/wanouri/.gradle/caches/transforms-3/ceb0b9cb600ef1ebfcd008ffa3171afe/transformed/core-1.13.1/AndroidManifest.xml:26:22-94
-uses-permission#com.yoshiyuki.matsumoto.tabi_memo.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+uses-permission#com.wanouri.tabi_memo.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
 ADDED from [androidx.core:core:1.13.1] /Users/wanouri/.gradle/caches/transforms-3/ceb0b9cb600ef1ebfcd008ffa3171afe/transformed/core-1.13.1/AndroidManifest.xml:26:5-97
 	android:name
 		ADDED from [androidx.core:core:1.13.1] /Users/wanouri/.gradle/caches/transforms-3/ceb0b9cb600ef1ebfcd008ffa3171afe/transformed/core-1.13.1/AndroidManifest.xml:26:22-94

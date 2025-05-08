@@ -4,7 +4,7 @@
     "type": "BUNDLE",
     "kind": "RegularFile"
   },
-  "applicationId": "com.yoshiyuki.matsumoto.tabi_memo",
+  "applicationId": "com.wanouri.tabi_memo",
   "variantName": "release",
   "elements": [
     {

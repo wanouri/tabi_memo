@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.yoshiyuki.matsumoto.tabi_memo.app-mergeReleaseResources-26:/values/values.xml",
+            "outputFile": "com.wanouri.tabi_memo.app-mergeReleaseResources-26:/values/values.xml",
             "map": [
                 {
                     "source": "/Users/wanouri/.gradle/caches/transforms-3/f7f8b85db2e18e4f174a6b6ca1eb2799/transformed/fragment-1.7.1/res/values/values.xml",

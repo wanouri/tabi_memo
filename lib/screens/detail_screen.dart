@@ -24,6 +24,7 @@ class _DetailScreenState extends State<DetailScreen> {
       widget.memo.body,
       widget.memo.date,
       widget.memo.imagePath,
+      widget.memo.category,
     );
   }
 
@@ -31,6 +32,31 @@ class _DetailScreenState extends State<DetailScreen> {
   Widget build(BuildContext context) {
     final dateText =
         _memo.date != null ? DateFormat('yyyy/MM/dd').format(_memo.date!) : '';
+    IconData getCategoryIcon(String? category) {
+      switch (category) {
+        case 'travel':
+          return Icons.flight;
+        case 'gourmet':
+          return Icons.restaurant;
+        case 'business':
+          return Icons.work;
+        default:
+          return Icons.label;
+      }
+    }
+
+    Color getCategoryColor(String? category) {
+      switch (category) {
+        case 'travel':
+          return Colors.blue;
+        case 'gourmet':
+          return Colors.red;
+        case 'business':
+          return Colors.green;
+        default:
+          return Colors.grey;
+      }
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -83,6 +109,25 @@ class _DetailScreenState extends State<DetailScreen> {
                   ],
                 ),
                 const SizedBox(height: 8),
+                // ↓↓↓ このカテゴリ表示を追加 ↓↓↓
+                if (_memo.category != null)
+                  Row(
+                    children: [
+                      Icon(
+                        getCategoryIcon(_memo.category),
+                        color: getCategoryColor(_memo.category),
+                        size: 20,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        _memo.category!,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          color: getCategoryColor(_memo.category),
+                        ),
+                      ),
+                    ],
+                  ),
                 Row(
                   children: [
                     const Icon(Icons.calendar_today,

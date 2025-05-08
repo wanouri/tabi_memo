@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.yoshiyuki.matsumoto.tabi_memo"
+    package="com.wanouri.tabi_memo"
     android:versionCode="1"
     android:versionName="1.0.0" >
 
@@ -23,10 +23,10 @@
     </queries>
 
     <permission
-        android:name="com.yoshiyuki.matsumoto.tabi_memo.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+        android:name="com.wanouri.tabi_memo.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.yoshiyuki.matsumoto.tabi_memo.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+    <uses-permission android:name="com.wanouri.tabi_memo.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
 
     <application
         android:name="android.app.Application"
@@ -35,7 +35,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="tabi_memo" >
         <activity
-            android:name="com.yoshiyuki.matsumoto.tabi_memo.MainActivity"
+            android:name="com.wanouri.tabi_memo.MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:exported="true"
             android:hardwareAccelerated="true"
@@ -70,7 +70,7 @@
 
         <provider
             android:name="io.flutter.plugins.imagepicker.ImagePickerFileProvider"
-            android:authorities="com.yoshiyuki.matsumoto.tabi_memo.flutter.image_provider"
+            android:authorities="com.wanouri.tabi_memo.flutter.image_provider"
             android:exported="false"
             android:grantUriPermissions="true" >
             <meta-data
@@ -99,7 +99,7 @@
 
         <provider
             android:name="androidx.startup.InitializationProvider"
-            android:authorities="com.yoshiyuki.matsumoto.tabi_memo.androidx-startup"
+            android:authorities="com.wanouri.tabi_memo.androidx-startup"
             android:exported="false" >
             <meta-data
                 android:name="androidx.lifecycle.ProcessLifecycleInitializer"

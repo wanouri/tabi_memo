@@ -20,6 +20,8 @@ class _AddDataScreenState extends State<AddDataScreen> {
   final TextEditingController _bodyController = TextEditingController();
   DateTime? _selectedDate;
   String? _imagePath;
+  String? _selectedCategory;
+  final List<String> _categories = ['travel', 'gourmet', 'business', 'others'];
 
   @override
   void initState() {
@@ -28,6 +30,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
     _bodyController.text = widget.memo.body ?? '';
     _selectedDate = widget.memo.date;
     _imagePath = widget.memo.imagePath;
+    _selectedCategory = widget.memo.category;
   }
 
   Future<void> _pickDate() async {
@@ -144,6 +147,28 @@ class _AddDataScreenState extends State<AddDataScreen> {
                 ),
               ],
             ),
+            SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              child: DropdownButtonFormField<String>(
+                value: _selectedCategory,
+                items: _categories.map((category) {
+                  return DropdownMenuItem(
+                    value: category,
+                    child: Text(category),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _selectedCategory = value!;
+                  });
+                },
+                decoration: const InputDecoration(
+                  labelText: 'カテゴリを選択',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
             const SizedBox(height: 30),
             Center(
               child: ElevatedButton.icon(
@@ -173,6 +198,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
                     );
                     return;
                   }
+
                   if (widget.memo.id != null) {
                     Memo memo = Memo(
                       widget.memo.id,
@@ -180,6 +206,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
                       _bodyController.text,
                       _selectedDate,
                       _imagePath,
+                      _selectedCategory,
                     );
 
                     DatabaseHelper.update({
@@ -188,6 +215,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
                       'body': memo.body,
                       'date': memo.date?.toIso8601String(),
                       'imagePath': memo.imagePath,
+                      'category': memo.category,
                     });
                     if (context.mounted) {
                       Navigator.pop(context, memo);
@@ -198,6 +226,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
                       'body': _bodyController.text,
                       'date': _selectedDate?.toIso8601String(),
                       'imagePath': _imagePath,
+                      'category': _selectedCategory,
                     });
                     Navigator.pop(context, true);
                   }

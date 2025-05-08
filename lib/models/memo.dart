@@ -5,6 +5,7 @@ class Memo {
     this.body, // 本文
     this.date, // 日付
     this.imagePath, // 画像パス
+    this.category, // カテゴリ
   );
 
   final int? id;
@@ -12,4 +13,5 @@ class Memo {
   final String? body;
   final DateTime? date;
   final String? imagePath;
+  final String? category;
 }

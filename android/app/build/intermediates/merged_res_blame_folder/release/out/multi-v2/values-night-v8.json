@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.yoshiyuki.matsumoto.tabi_memo.app-mergeReleaseResources-26:/values-night-v8/values-night-v8.xml",
+            "outputFile": "com.wanouri.tabi_memo.app-mergeReleaseResources-26:/values-night-v8/values-night-v8.xml",
             "map": [
                 {
                     "source": "/Users/wanouri/Projects/FlutterApps/tabi_memo/android/app/src/main/res/values-night/styles.xml",
