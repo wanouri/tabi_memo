@@ -15,12 +15,22 @@ class _CalendarScreenState extends State<CalendarScreen> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   List<Memo> _allMemos = [];
+  Map<DateTime, List<Memo>> _eventMap = {};
 
   @override
   void initState() {
     super.initState();
     _selectedDay = _focusedDay;
     _loadMemos();
+  }
+
+  void _buildEventMap() {
+    _eventMap = {};
+    for (var memo in _allMemos) {
+      if (memo.date == null) continue;
+      final date = DateTime(memo.date!.year, memo.date!.month, memo.date!.day);
+      _eventMap.putIfAbsent(date, () => []).add(memo);
+    }
   }
 
   Future<void> _loadMemos() async {
@@ -36,16 +46,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
           map['category'],
         );
       }).toList();
+      _buildEventMap(); // ← メモを読み込んだあとにイベントマップ作成！
     });
   }
 
   List<Memo> _getMemosForDay(DateTime day) {
-    return _allMemos.where((memo) {
-      if (memo.date == null) return false;
-      return memo.date!.year == day.year &&
-          memo.date!.month == day.month &&
-          memo.date!.day == day.day;
-    }).toList();
+    return _eventMap[DateTime(day.year, day.month, day.day)] ?? [];
   }
 
   @override
@@ -80,7 +86,15 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 color: Colors.blue,
                 shape: BoxShape.circle,
               ),
+              markerDecoration: BoxDecoration(
+                color: Colors.deepOrange,
+                shape: BoxShape.circle,
+              ),
             ),
+            eventLoader: (day) {
+              final date = DateTime(day.year, day.month, day.day);
+              return _eventMap[date] ?? [];
+            },
           ),
           const SizedBox(height: 12),
           Expanded(

@@ -4,6 +4,7 @@ import 'package:tabi_memo/models/memo.dart';
 import 'package:tabi_memo/screens/add_data_screen.dart';
 import 'package:tabi_memo/screens/calendar_screen.dart';
 import 'package:tabi_memo/widgets/memo_card.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.title});
@@ -54,7 +55,7 @@ class _MyHomePageState extends State<HomeScreen> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _getMemos();
+    loadSortOrder().then((_) => _getMemos());
   }
 
   // データベースからメモを取得する
@@ -96,6 +97,19 @@ class _MyHomePageState extends State<HomeScreen> with WidgetsBindingObserver {
     return filtered;
   }
 
+  Future<void> saveSortOrder(bool isNewestFirst) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('sortOrderNewestFirst', isNewestFirst);
+  }
+
+  Future<void> loadSortOrder() async {
+    final prefs = await SharedPreferences.getInstance();
+    final saved = prefs.getBool('sortOrderNewestFirst') ?? true;
+    setState(() {
+      _isNewestFirst = saved;
+    });
+  }
+
   // メモのリストをソートする
   @override
   Widget build(BuildContext context) {
@@ -121,17 +135,23 @@ class _MyHomePageState extends State<HomeScreen> with WidgetsBindingObserver {
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () {
-              _getMemos();
+              setState(() {
+                _isNewestFirst = !_isNewestFirst;
+              });
+              saveSortOrder(_isNewestFirst);
+              _getMemos(); // 並び替え反映
             },
           ),
           IconButton(
+            // トグル用アイコン
             icon: Icon(
                 _isNewestFirst ? Icons.arrow_downward : Icons.arrow_upward),
-            tooltip: _isNewestFirst ? '新しい順' : '古い順',
             onPressed: () {
               setState(() {
                 _isNewestFirst = !_isNewestFirst;
               });
+              saveSortOrder(_isNewestFirst); // ← これを追加！
+              _getMemos(); // ← これも入れるとリアルタイム更新
             },
           ),
           IconButton(
