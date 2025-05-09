@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#164272</color> <!-- ← Flutterと同じ背景色 -->
+</resources>

@@ -22,13 +22,13 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         scaffoldBackgroundColor: const Color(0xFFF5F9FC),
         appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFF81D4FA),
+          backgroundColor: Color(0xFF164272),
           foregroundColor: Colors.white,
           elevation: 1,
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: Color(0xFF4FC3F7),
+            backgroundColor: Color(0xFF164272),
             foregroundColor: Colors.white,
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
             shape: RoundedRectangleBorder(

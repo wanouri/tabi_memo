@@ -35,14 +35,14 @@ class DatabaseHelper {
     );
   }
 
-  static Future<List<Map<String, dynamic>>> select() async {
+  static Future<List<Map<String, dynamic>>> select({int limit = 100}) async {
     final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query('notes');
-    if (maps.isNotEmpty) {
-      return maps;
-    } else {
-      return [];
-    }
+    final List<Map<String, dynamic>> maps = await db.query(
+      'notes',
+      orderBy: 'date DESC',
+      limit: limit,
+    );
+    return maps;
   }
 
   static Future<Map<String, dynamic>> selectAt(int id) async {

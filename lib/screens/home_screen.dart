@@ -60,7 +60,8 @@ class _MyHomePageState extends State<HomeScreen> with WidgetsBindingObserver {
 
   // データベースからメモを取得する
   Future<void> _getMemos() async {
-    final List<Map<String, dynamic>> maps = await DatabaseHelper.select();
+    final List<Map<String, dynamic>> maps =
+        await DatabaseHelper.select(limit: 1000);
     setState(() {
       memos = List.generate(maps.length, (i) {
         return Memo(
